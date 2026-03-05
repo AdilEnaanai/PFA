@@ -1,0 +1,29 @@
+.choice{
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px 0;
+    background-color: rgb(250, 197, 179);
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    height: 30px;
+
+}
+
+.question{
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.box{
+    margin-top: 13%;
+    width: 600px;
+   
+}
+
+.choices{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
