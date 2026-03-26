@@ -6,57 +6,58 @@ def get_conn():
         host="127.0.0.1",
         user="root",
         password="1111",
-        database="clientdb",
+        database="pfa",
         port=3306
     )
-@app.route("/clients",methods=["GET"])
-def clients():
+@app.route("/users",methods=["GET"])
+def users():
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM clients")
+    cur.execute("SELECT * FROM users")
     rows = cur.fetchall()
     cur.close()
     conn.close()
     return jsonify(rows)
 
-@app.route("/clients/<int:client_id>")
-def client(client_id):
+@app.route("/users/<string:username>", methods=["GET"])
+def user(username):
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
     row = cur.fetchone()
     cur.close()
     conn.close()
     if row:
         return jsonify(row)
     else:
-        return jsonify({"error": "Client not found"}), 404
+        return jsonify({"error": "User not found"}), 404
 
-@app.route("/clients", methods=["POST"])
-def add_client():
+@app.route("/users", methods=["POST"])
+def add_user():
         conn = get_conn()
         cur = conn.cursor()
         data =request.get_json()
-        nom=data.get("nom")
-        email=data.get("email")
-        telephone=data.get("telephone")
-        cur.execute("INSERT INTO clients (nom, email, telephone) VALUES (%s, %s, %s)", (nom, email, telephone))
+        username=data.get("username")
+        password=data.get("password")
+        firstname=data.get("firstname")
+        lastname=data.get("lastname")
+        cur.execute("INSERT INTO users (username, password, firstname, lastname) VALUES (%s, %s, %s, %s)", (username, password, firstname, lastname))
         conn.commit()
         cur.close()
         conn.close()
-        return jsonify({"message": "Client added successfully"})
-    
-    
-    
-@app.route('/clients/<int:client_id>', methods=['DELETE'])
-def delete_client(client_id):
+        return jsonify({"message": "User added successfully"})
+
+
+
+@app.route('/users/<string:username>', methods=['DELETE'])
+def delete_user(username):
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("DELETE FROM clients WHERE id = %s", (client_id,))
+    cur.execute("DELETE FROM users WHERE username = %s", (username,))
     conn.commit()
     cur.close()
     conn.close()
-    return jsonify({"message": "Client deleted successfully"})
+    return jsonify({"message": "User deleted successfully"})
 
 
 app.run(debug=True)
