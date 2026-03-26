@@ -1,6 +1,10 @@
 from flask import Flask, jsonify, request
 import pymysql
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
+
 def get_conn():
     return pymysql.connect(
         host="127.0.0.1",
