@@ -63,5 +63,20 @@ def delete_user(username):
     conn.close()
     return jsonify({"message": "User deleted successfully"})
 
+@app.route('/login', methods=['POST'])
+def login():
+    conn = get_conn()
+    cur = conn.cursor()
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+    cur.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
+    if user:
+        return jsonify({"message": "Login successful"})
+    else:
+        return jsonify({"error": "Invalid credentials"}), 401
 
 app.run(debug=True)
